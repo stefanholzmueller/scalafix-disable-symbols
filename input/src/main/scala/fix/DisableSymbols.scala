@@ -1,7 +1,7 @@
 /*
 rule = DisableSymbols
 DisableSymbols.symbols = [
-  "scala.Predef.println"
+  { symbol: "scala.Predef.println", message: "use logging instead" }
 ]
  */
 package fix
