@@ -1,10 +1,14 @@
 /*
 rule = DisableSymbols
+DisableSymbols.symbols = [
+  "scala.Predef.println"
+]
 */
 package fix
 
 object DisableSymbolsSignificantIndentation:
-  println() // assert: DisableSymbols
-  println("") // assert: DisableSymbols
+  println("forbidden") // assert: DisableSymbols
   println("ok") // scalafix:ok; suppressed
+  println() // assert: DisableSymbols
   Nil.foreach(println) // assert: DisableSymbols
+  System.out.println("this is not forbidden")

@@ -1,13 +1,18 @@
 package fix
 
+import metaconfig.Configured
 import scalafix.lint.LintSeverity
 import scalafix.v1._
 
 import scala.meta._
 
-class DisableSymbols extends SemanticRule("DisableSymbols") {
+class DisableSymbols(config: DisableSymbolsConfig) extends SemanticRule("DisableSymbols") {
+  def this() = this(DisableSymbolsConfig())
 
-  private val disabledSymbol: SymbolMatcher = SymbolMatcher.normalized("scala.Predef.println")
+  override def withConfiguration(config: Configuration): Configured[Rule] =
+    config.conf
+      .getOrElse("DisableSymbols")(this.config)
+      .map { newConfig => new DisableSymbols(newConfig) }
 
   private case class DisabledSymbol(position: Position) extends Diagnostic {
     override def message: String = "Use loggers instead of println"
@@ -15,8 +20,11 @@ class DisableSymbols extends SemanticRule("DisableSymbols") {
   }
 
   override def fix(implicit doc: SemanticDocument): Patch = {
-    doc.tree.collect { case disabledSymbol(t: Name) =>
-      Patch.lint(DisabledSymbol(t.pos))
+    config.symbols.flatMap { symbol =>
+      val matcher = SymbolMatcher.normalized(symbol)
+      doc.tree.collect { case matcher(t: Name) =>
+        Patch.lint(DisabledSymbol(t.pos))
+      }
     }.asPatch
   }
 
