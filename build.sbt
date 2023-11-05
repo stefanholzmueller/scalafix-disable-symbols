@@ -1,20 +1,18 @@
 lazy val V = _root_.scalafix.sbt.BuildInfo
 
 lazy val rulesCrossVersions = Seq(V.scala213, V.scala212)
-lazy val scala3Version = "3.3.0"
+lazy val scala3Version = "3.3.1"
 
 inThisBuild(
   List(
     organization := "stefanholzmueller",
     homepage := Some(url("https://github.com/stefanholzmueller/scalafix-disable-symbols")),
-    licenses := List(
-      "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
-    ),
+    licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
         "stefanholzmueller",
         "Stefan Holzmüller",
-        "stefan@no-this-is-not-my-real-email.no",
+        "stefan@this-is-not-my-real-email.no",
         url("https://github.com/stefanholzmueller")
       )
     ),
